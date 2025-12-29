@@ -1,59 +1,70 @@
-import { useState } from 'react'
-import { 
-  Container, 
-  Typography, 
-  Button, 
-  Box, 
-  Card, 
-  CardContent,
-  Stack
-} from '@mui/material'
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
+import { useState } from 'react';
+import { Box } from '@mui/material';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import Breadcrumb from './components/Breadcrumb';
+import FilterSection from './components/FilterSection';
+import UsersTable from './components/UsersTable';
+import PendingUsersTable from './components/PendingUsersTable';
+import InfoBar from './components/InfoBar';
+import { usersData, pendingUsersData } from './data/users';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [filter, setFilter] = useState('all');
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <Card sx={{ borderRadius: 4, boxShadow: 3 }}>
-        <CardContent>
-          <Box sx={{ textAlign: 'center', py: 4 }}>
-            <RocketLaunchIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-            
-            <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-              فراهوش
-            </Typography>
-            
-            <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-              React + Material UI آماده‌ست! 🎉
-            </Typography>
-            
-            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mb: 3 }}>
-              <Button 
-                variant="contained" 
-                size="large"
-                onClick={() => setCount((count) => count + 1)}
-              >
-                کلیک: {count}
-              </Button>
-              
-              <Button 
-                variant="outlined" 
-                size="large"
-                onClick={() => setCount(0)}
-              >
-                ریست
-              </Button>
-            </Stack>
-            
-            <Typography variant="body2" color="text.secondary">
-              فایل <code>src/App.jsx</code> رو ویرایش کن و شروع کن!
-            </Typography>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: '#f5f5f5',
+        direction: 'rtl',
+        overflow: 'hidden',
+      }}
+    >
+      <Sidebar />
+
+      <Box
+        sx={{
+          mr: '48px',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+        }}
+      >
+        <Header />
+
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            p: 2,
+            overflowX: 'hidden',
+            overflowY: 'auto',
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: '#fff',
+              borderRadius: '16px',
+              p: 2,
+              minHeight: 'calc(100vh - 150px)',
+            }}
+          >
+            <Breadcrumb />
+            <FilterSection value={filter} onChange={handleFilterChange} />
+            <UsersTable users={usersData} />
+            <PendingUsersTable users={pendingUsersData} />
           </Box>
-        </CardContent>
-      </Card>
-    </Container>
-  )
+        </Box>
+
+        <InfoBar />
+      </Box>
+    </Box>
+  );
 }
 
-export default App
+export default App;
